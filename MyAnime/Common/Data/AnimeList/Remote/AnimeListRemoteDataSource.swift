@@ -8,5 +8,5 @@
 import Foundation
 
 protocol AnimeListRemoteDataSource {
-    func getAnimeList() async throws -> AnimeListResponse
+    func getAnimeList() async throws -> AnimeList
 }

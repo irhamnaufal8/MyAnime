@@ -7,24 +7,30 @@
 
 import Foundation
 
-typealias AnimeListResponse = [AnimeList]
-
 struct AnimeList: Codable {
-    var top: [AnimeData]
+    let top: [AnimeData]?
 }
 
-struct AnimeData: Codable {
-    var malId: Int?
-    var rank: Int?
-    var title: String?
-    var type: String?
-    var startDate: String?
-    var imageUrl: String?
+struct AnimeData: Codable, Hashable {
+    let malId: Int?
+    let rank: Int?
+    let title: String?
+    let type: String?
+    let startDate: String?
+    let imageUrl: String?
     
     enum CodingKeys: String, CodingKey {
         case rank, title, type
         case malId = "mal_id"
         case startDate = "start_date"
         case imageUrl = "image_url"
+    }
+    
+    static func == (lhs: AnimeData, rhs: AnimeData) -> Bool {
+        return lhs.malId.orZero() == rhs.malId.orZero()
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(malId.orZero())
     }
 }

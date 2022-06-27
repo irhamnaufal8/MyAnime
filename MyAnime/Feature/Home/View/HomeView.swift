@@ -17,10 +17,13 @@ struct HomeView: View {
                 if viewModel.isError {
                     Text(viewModel.error)
                 } else {
-                    List($viewModel.animeListData, id: \.top[0].malId) { item in
-                        AnimeCardView(viewModel: AnimeCardViewModel(anime: item.wrappedValue))
+
+                    if let data = viewModel.animeListData?.top {
+                        List(data, id:\.malId) { item in
+                            AnimeCardView(viewModel: AnimeCardViewModel(anime: item))
+                        }
+                        .listStyle(PlainListStyle())
                     }
-                    .listStyle(PlainListStyle())
                 }
                 
                 if viewModel.isLoading {

@@ -15,7 +15,7 @@ final class AnimeListDefaultRemoteDataSource: AnimeListRemoteDataSource {
         self.provider = provider
     }
     
-    func getAnimeList() async throws -> AnimeListResponse {
-        try await self.provider.requestAsync(.getAnimeList, model: AnimeListResponse.self)
+    func getAnimeList() async throws -> AnimeList {
+        try await self.provider.requestAsync(.getAnimeList, model: AnimeList.self)
     }
 }

@@ -8,5 +8,5 @@
 import Foundation
 
 protocol AnimeListRepositroy {
-    func provideGetAnimeList() async throws -> AnimeListResponse
+    func provideGetAnimeList() async throws -> AnimeList
 }

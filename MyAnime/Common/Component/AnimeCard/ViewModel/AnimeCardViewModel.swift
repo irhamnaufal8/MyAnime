@@ -13,9 +13,9 @@ final class AnimeCardViewModel: ObservableObject {
     @Published var title = ""
     @Published var rank: Int = 0
     
-    @Published var anime: AnimeList
+    @Published var anime: AnimeData
     
-    init(anime: AnimeList) {
+    init(anime: AnimeData) {
         self.anime = anime
     }
     
@@ -24,22 +24,22 @@ final class AnimeCardViewModel: ObservableObject {
     }
     
     func imageUrl() -> String {
-        return anime.top[0].imageUrl ?? ""
+        return anime.imageUrl ?? ""
     }
     
     func animeTitle() -> String {
-        return anime.top[0].title ?? ""
+        return anime.title ?? ""
     }
     
     func animeRank() -> Int {
-        return anime.top[0].rank ?? 0
+        return anime.rank ?? 0
     }
     
     func animeType() -> String {
-        return anime.top[0].type ?? ""
+        return anime.type ?? ""
     }
     
     func animeStartDate() -> String {
-        return anime.top[0].startDate ?? ""
+        return anime.startDate ?? ""
     }
 }

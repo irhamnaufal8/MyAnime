@@ -15,7 +15,7 @@ final class HomeViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var error = ""
     @Published var isError = false
-    @Published var animeListData = AnimeListResponse()
+    @Published var animeListData: AnimeList?
     
     init(repository: AnimeListRepositroy = AnimeListDefaultRepository()) {
         self.repository = repository
@@ -41,7 +41,7 @@ final class HomeViewModel: ObservableObject {
             DispatchQueue.main.async { [weak self] in
                 self?.isLoading = false
                 self?.isError = true
-                self?.error = error.localizedDescription
+                self?.error = "\(error)"
             }
         }
     }
@@ -52,8 +52,8 @@ final class HomeViewModel: ObservableObject {
         }
     }
     
-    func isAnimeListEmpty() -> Bool {
-        animeListData.isEmpty
-    }
+//    func isAnimeListEmpty() -> Bool {
+//        animeListData.isEmpty
+//    }
     
 }

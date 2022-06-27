@@ -15,7 +15,7 @@ final class AnimeListDefaultRepository: AnimeListRepositroy {
         self.remoteDataSource = remoteDataSource
     }
     
-    func provideGetAnimeList() async throws -> AnimeListResponse {
+    func provideGetAnimeList() async throws -> AnimeList {
         try await self.remoteDataSource.getAnimeList()
     }
  
