@@ -15,7 +15,7 @@ final class HomeViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var error = ""
     @Published var isError = false
-    @Published var animeListData: AnimeList?
+    @Published var animeListData = [Anime]()
     
     init(repository: AnimeListRepositroy = AnimeListDefaultRepository()) {
         self.repository = repository
@@ -33,9 +33,29 @@ final class HomeViewModel: ObservableObject {
         do {
             let response = try await repository.provideGetAnimeList()
             
+            for item in response.top ?? [] {
+                try self.repository.provideSaveToLocalAnimeList(by: item)
+            }
+            
             DispatchQueue.main.async { [weak self] in
                 self?.isLoading = false
-                self?.animeListData = response
+            }
+            
+        } catch {
+            DispatchQueue.main.async { [weak self] in
+                self?.isLoading = false
+                self?.isError = true
+                self?.error = "\(error)"
+            }
+        }
+    }
+    
+    func loadLocalAnimeList() async {
+        do {
+            let data = try await repository.provideLoadLocalAnime()
+            
+            DispatchQueue.main.async { [weak self] in
+                self?.animeListData = data
             }
         } catch {
             DispatchQueue.main.async { [weak self] in
@@ -46,14 +66,49 @@ final class HomeViewModel: ObservableObject {
         }
     }
     
-    func onAnimeListAppear() {
-        Task.init {
-            await getAnimeList()
+    func isLocalEmpty() async -> Bool {
+        do {
+            let data = try await repository.provideLoadLocalAnime()
+            
+            return data.isEmpty
+            
+        } catch {
+            return false
         }
     }
     
-//    func isAnimeListEmpty() -> Bool {
-//        animeListData.isEmpty
-//    }
+    func deleteItem() async {
+        do {
+            try repository.provideDeleteLocalItem()
+        } catch {
+            self.isLoading = false
+            self.isError = true
+            self.error = "\(error)"
+        }
+    }
     
+    func onAnimeListAppear() {
+        Task {
+            let isEmptyOnLocal = await isLocalEmpty()
+            if isEmptyOnLocal {
+
+                await getAnimeList()
+            }
+//            await deleteItem()
+            await loadLocalAnimeList()
+            print(animeListData)
+        }
+    }
+    
+    func toggleFavorite(anime: Anime) {
+        do {
+            try repository.provideToggleFavorite(by: anime)
+            onAnimeListAppear()
+            
+        } catch {
+            self.isLoading = false
+            self.isError = true
+            self.error = "\(error)"
+        }
+    }
 }

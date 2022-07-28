@@ -9,6 +9,8 @@ import SwiftUI
 
 @main
 struct MyAnimeApp: App {
+    let persistenceController = PersistenceController.shared
+    
     var body: some Scene {
         WindowGroup {
             HomeView()

@@ -12,30 +12,57 @@ struct HomeView: View {
     @ObservedObject var viewModel = HomeViewModel()
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                if viewModel.isError {
-                    Text(viewModel.error)
-                } else {
+        
+        VStack {
+            TabView {
+                NavigationView {
+                    ZStack {
+                        if viewModel.isError {
+                            Text(viewModel.error)
+                        } else {
+                            
+                            if let data = viewModel.animeListData {
+                                List(data, id:\.malId) { item in
+                                    AnimeCardView(
+                                        viewModel: AnimeCardViewModel(anime: item),
+                                        isFavorite: item.favorite
+                                    )
+                                    .swipeActions(content: {
+                                        Button {
+                                            viewModel.toggleFavorite(anime: item)
+                                        } label: {
+                                            Image(systemName: "star.fill")
+                                        }
+                                        .tint(.yellow)
 
-                    if let data = viewModel.animeListData?.top {
-                        List(data, id:\.malId) { item in
-                            AnimeCardView(viewModel: AnimeCardViewModel(anime: item))
+                                    })
+                                }
+                                .listStyle(PlainListStyle())
+                            }
                         }
-                        .listStyle(PlainListStyle())
+                        
+                        if viewModel.isLoading {
+                            ProgressView()
+                                .progressViewStyle(.circular)
+                        }
+                        
                     }
+                    .navigationBarTitle(LocalizableText.homeScreenTitle)
                 }
+                .tabItem {
+                    Image(systemName: "house")
+                    Text(LocalizableText.homeScreenTitle)
+                }
+                .onAppear(perform: {
+                    viewModel.onAnimeListAppear()
+                })
                 
-                if viewModel.isLoading {
-                    ProgressView()
-                        .progressViewStyle(.circular)
-                }
-            
+                FavoriteView()
+                    .tabItem {
+                        Image(systemName: "star")
+                        Text(LocalizableText.favoriteScreenTitle)
+                    }
             }
-            .navigationTitle("My Anime")
-            .onAppear(perform: {
-                viewModel.onAnimeListAppear()
-            })
         }
     }
 }

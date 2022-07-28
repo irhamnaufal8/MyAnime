@@ -12,7 +12,6 @@ struct ImageLoader: View {
     var url: String
     var width: CGFloat?
     var height: CGFloat?
-    var cornerRadius: CGFloat?
     
     var body: some View {
         AsyncImage(
@@ -22,24 +21,24 @@ struct ImageLoader: View {
                 case .empty:
                     Image(systemName: "photo")
                         .resizable()
-                        .scaledToFit()
-                        .frame(width: width)
+                        .scaledToFill()
+                        .frame(width: width, height: height)
                 case .failure:
                     Image(systemName: "photo")
                         .resizable()
-                        .scaledToFit()
-                        .frame(width: width)
+                        .scaledToFill()
+                        .frame(width: width, height: height)
                 case .success(let image):
                     image
                         .resizable()
-                        .scaledToFit()
+                        .scaledToFill()
                         .frame(width: width, height: height)
-                        .cornerRadius(cornerRadius ?? 20)
+                        .cornerRadius(10)
                 @unknown default:
                     Image(systemName: "photo")
                         .resizable()
-                        .scaledToFit()
-                        .frame(width: width)
+                        .scaledToFill()
+                        .frame(width: width, height: height)
                 }
             }
         )

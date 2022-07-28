@@ -13,9 +13,9 @@ final class AnimeCardViewModel: ObservableObject {
     @Published var title = ""
     @Published var rank: Int = 0
     
-    @Published var anime: AnimeData
+    @Published var anime: Anime
     
-    init(anime: AnimeData) {
+    init(anime: Anime) {
         self.anime = anime
     }
     
@@ -32,7 +32,7 @@ final class AnimeCardViewModel: ObservableObject {
     }
     
     func animeRank() -> Int {
-        return anime.rank ?? 0
+        return Int(anime.rank)
     }
     
     func animeType() -> String {

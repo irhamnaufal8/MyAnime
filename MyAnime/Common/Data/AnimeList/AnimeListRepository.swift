@@ -9,4 +9,8 @@ import Foundation
 
 protocol AnimeListRepositroy {
     func provideGetAnimeList() async throws -> AnimeList
+    func provideSaveToLocalAnimeList(by anime: AnimeData) throws
+    func provideLoadLocalAnime() async throws -> [Anime]
+    func provideDeleteLocalItem() throws
+    func provideToggleFavorite(by anime: Anime) throws
 }

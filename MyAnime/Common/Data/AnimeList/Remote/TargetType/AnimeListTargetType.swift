@@ -32,6 +32,25 @@ extension AnimeListTargetType: MyAnimeTargetType {
         return .requestParameters(parameters: parameters, encoding: parameterEncoding)
     }
     
+    var sampleData: Data {
+        switch self {
+        case .getAnimeList:
+            let response = AnimeList(
+                top: [
+                    AnimeData(
+                        malId: 1,
+                        rank: 1,
+                        title: "Unit Anime",
+                        type: "TV",
+                        startDate: "1 Jan",
+                        imageUrl: "https://image.com/image.jpg"
+                    )
+                ]
+            )
+            return response.toJSONData()
+        }
+    }
+    
     var method: Moya.Method {
         switch self {
         case .getAnimeList:
